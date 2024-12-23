@@ -1,3 +1,5 @@
+--if You’re going to skid please give credit
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
