@@ -1,0 +1,170 @@
+--only skid if u give me credit ofc :3
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "moma hub",
+    Icon = 0,
+    LoadingTitle = "moma hub loading",
+    LoadingSubtitle = "by moma1133222",
+    Theme = "Default",
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false,
+    ConfigurationSaving = {
+       Enabled = false,
+       FolderName = nil,
+       FileName = "moma hub"
+    },
+    Discord = {
+       Enabled = false,
+       Invite = "noinvitelink",
+       RememberJoins = true
+    },
+    KeySystem = false,
+    KeySettings = {
+       Title = "Untitled",
+       Subtitle = "Key System",
+       Note = "No method of obtaining the key is provided",
+       FileName = "Key",
+       SaveKey = true,
+       GrabKeyFromSite = false,
+       Key = {"Hello"}
+    }
+})
+
+local Tab = Window:CreateTab("Main", 4483362458)
+local Section = Tab:CreateSection("Main stuff")
+
+Rayfield:Notify({
+    Title = "Follow me please",
+    Content = "my script blox moma1133222",
+    Duration = 6.5,
+    Image = 4483362458,
+})
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TrainService = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.5.1"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("TrainService"):WaitForChild("RE"):WaitForChild("Train")
+
+local isToggled = false
+
+local Toggle = Tab:CreateToggle({
+    Name = "auto train",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        isToggled = Value
+        if isToggled then
+            print("Train Toggle is ON.")
+            coroutine.wrap(function()
+                while isToggled do
+                    TrainService:FireServer()
+                    task.wait(0.01)
+                end
+            end)()
+        else
+            print("Train Toggle is OFF.")
+        end
+    end,
+})
+
+local RebirthService = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.5.1"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("RebirthService"):WaitForChild("RF"):WaitForChild("Rebirth")
+
+local isAutoRebirthActive = false
+
+local Toggle = Tab:CreateToggle({
+    Name = "Auto Rebirth",
+    CurrentValue = false,
+    Flag = "AutoRebirthToggle",
+    Callback = function(Value)
+        isAutoRebirthActive = Value
+        if isAutoRebirthActive then
+            print("Auto Rebirth is ON.")
+            coroutine.wrap(function()
+                while isAutoRebirthActive do
+                    RebirthService:InvokeServer()
+                    task.wait(0.1)
+                end
+            end)()
+        else
+            print("Auto Rebirth is OFF.")
+        end
+    end,
+})
+
+local AttackService = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.5.1"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("FightService"):WaitForChild("RE"):WaitForChild("Attack")
+
+local isSpamAttackActive = false
+
+local Toggle = Tab:CreateToggle({
+    Name = "Spam Attack",
+    CurrentValue = false,
+    Flag = "SpamAttackToggle",
+    Callback = function(Value)
+        isSpamAttackActive = Value
+        if isSpamAttackActive then
+            print("Spam Attack is ON.")
+            coroutine.wrap(function()
+                while isSpamAttackActive do
+                    AttackService:FireServer()
+                    task.wait(0.1)
+                end
+            end)()
+        else
+            print("Spam Attack is OFF.")
+        end
+    end,
+})
+
+local ClaimDailyChestService = ReplicatedStorage:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.5.1"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("ChestService"):WaitForChild("RF"):WaitForChild("ClaimDailyChest")
+
+local isSpamDailyChestActive = false
+
+local Toggle = Tab:CreateToggle({
+    Name = "Spam Daily Chest (OP)",
+    CurrentValue = false,
+    Flag = "SpamDailyChestToggle",
+    Callback = function(Value)
+        isSpamDailyChestActive = Value
+        if isSpamDailyChestActive then
+            print("Spam Daily Chest (OP) is ON.")
+            coroutine.wrap(function()
+                while isSpamDailyChestActive do
+                    ClaimDailyChestService:InvokeServer()
+                    task.wait(0.1)
+                end
+            end)()
+        else
+            print("Spam Daily Chest (OP) is OFF.")
+        end
+    end,
+})
+
+local Tab = Window:CreateTab("Teleport", 4483362458)
+local Section = Tab:CreateSection("King of the hill")
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local Button = Tab:CreateButton({
+    Name = "King of the Hill World 1",
+    Callback = function()
+        if localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then
+            localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1008, 839, 1041)
+            print("Teleported to (-1008, 839, 1041).")
+        else
+            print("Character not found or not loaded.")
+        end
+    end,
+})
+
+local Button = Tab:CreateButton({
+    Name = "King of the Hill World 2",
+    Callback = function()
+        if localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") then
+            localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-17225, 831, 1182)
+            print("Teleported to (-17225, 831, 1182).")
+        else
+            print("Character not found or not loaded.")
+        end
+    end,
+})
