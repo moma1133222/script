@@ -147,8 +147,6 @@ Tab:CreateButton({
             {"3MVISITS"},
             {"LavaMegalodon"},
             {"DEV"}
-            {"OWNER#22222"},
-            {"BestOwner"}
         }
 
         for _, args in ipairs(argsList) do
