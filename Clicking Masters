@@ -1,0 +1,102 @@
+--very simple script if u skid leave credit
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "moma hub - scriptblox = moma1133222 follow me please",
+    Icon = 0,
+    LoadingTitle = "moma hub loading",
+    LoadingSubtitle = "by moma1133222",
+    Theme = "Default",
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false,
+    ConfigurationSaving = {
+       Enabled = false,
+       FolderName = nil,
+       FileName = "moma hub"
+    },
+    Discord = {
+       Enabled = false,
+       Invite = "noinvitelink",
+       RememberJoins = true
+    },
+    KeySystem = false,
+    KeySettings = {
+       Title = "Untitled",
+       Subtitle = "Key System",
+       Note = "No method of obtaining the key is provided",
+       FileName = "Key",
+       SaveKey = true,
+       GrabKeyFromSite = false,
+       Key = {"Hello"}
+    }
+})
+
+local Tab = Window:CreateTab("Main", 4483362458)
+local Section = Tab:CreateSection("Main stuff")
+
+Rayfield:Notify({
+    Title = "Follow me please",
+    Content = "my script blox moma1133222",
+    Duration = 6.5,
+    Image = 4483362458,
+})
+
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local events = replicatedStorage:WaitForChild("Events")
+local clickEvent = events:WaitForChild("Click")
+
+local isAutoTapping = false
+
+local Toggle = Tab:CreateToggle({
+    Name = "Auto Tap",
+    CurrentValue = false,
+    Flag = "AutoTapFlag",
+    Callback = function(Value)
+        isAutoTapping = Value
+        if isAutoTapping then
+            while isAutoTapping do
+                clickEvent:FireServer()
+                wait(0.1)
+            end
+        end
+    end,
+})
+
+local Tab = Window:CreateTab("Dupe", 4483362458)
+local Section = Tab:CreateSection("Dupes")
+
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local events = replicatedStorage:WaitForChild("Events")
+local claimHugeDollEvent = events:WaitForChild("ClaimHugeDoll")
+
+local Button = Tab:CreateButton({
+    Name = "Huge Dupe",
+    Callback = function()
+        local args = {
+            [1] = game:GetService("Players").LocalPlayer
+        }
+        claimHugeDollEvent:FireServer(unpack(args))
+    end,
+})
+
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local functions = replicatedStorage:WaitForChild("Functions")
+local receiveReward = functions:WaitForChild("ReceiveReward1")
+
+local isReceivingRewards = false
+
+local Toggle = Tab:CreateToggle({
+    Name = "Potion Dupe",
+    CurrentValue = false,
+    Flag = "ReceiveRewardFlag",
+    Callback = function(Value)
+        isReceivingRewards = Value
+        if isReceivingRewards then
+            while isReceivingRewards do
+                receiveReward:InvokeServer()
+                wait(0.1)
+            end
+        end
+    end,
+})
