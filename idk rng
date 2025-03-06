@@ -1,5 +1,45 @@
-local msg = Instance.new("Message", game:GetService("CoreGui"))
-msg.Text = "Sorry, the script has been closed for now. It's detected.\nIf you keep using it, you may be banned or wiped.\nI will try to bypass this and make it undetectable."
+-- Create the ScreenGui and parent it to CoreGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.CoreGui
+screenGui.Name = "SourceCodeInfoGui"
 
-task.wait(20)
-msg:Destroy()
+-- Create a Frame to hold our elements
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 200)
+frame.Position = UDim2.new(0.5, -200, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BackgroundTransparency = 0.2
+frame.Parent = screenGui
+
+-- Create a TextLabel with the message
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, -20, 0.6, -20)
+textLabel.Position = UDim2.new(0, 10, 0, 10)
+textLabel.BackgroundTransparency = 1
+textLabel.TextColor3 = Color3.new(1, 1, 1)
+textLabel.Font = Enum.Font.SourceSans
+textLabel.TextScaled = true
+textLabel.Text = "This is the link to the source code to my script.\nI will not be working on it any more.\nIf you use my script and edit it without leaving credit, you're a bad person.\n\nLink: https://raw.githubusercontent.com/moma1133222/script/refs/heads/main/idk%20rng%20full"
+textLabel.Parent = frame
+
+-- Create a button that copies the link when clicked
+local copyButton = Instance.new("TextButton")
+copyButton.Size = UDim2.new(0.5, 0, 0.25, 0)
+copyButton.Position = UDim2.new(0.25, 0, 0.7, 0)
+copyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+copyButton.TextColor3 = Color3.new(1, 1, 1)
+copyButton.Font = Enum.Font.SourceSans
+copyButton.TextScaled = true
+copyButton.Text = "Copy Link"
+copyButton.Parent = frame
+
+copyButton.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://raw.githubusercontent.com/moma1133222/script/refs/heads/main/idk%20rng%20full")
+        copyButton.Text = "Copied!"
+        wait(2)
+        copyButton.Text = "Copy Link"
+    else
+        warn("Clipboard function not available on this executor!")
+    end
+end)
