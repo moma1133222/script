@@ -1,15 +1,12 @@
---only use if you leave credit
+--leave credits if your going to edit this script
 
 
------------------------------------
--- Rayfield UI Setup
------------------------------------
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "moma hub",
+    Name = "moma hub - idk rng",
     Icon = 0,
-    LoadingTitle = "Loading...",
+    LoadingTitle = "Loading…",
     LoadingSubtitle = "by moma1133222",
     Theme = "Default",
     DisableRayfieldPrompts = false,
@@ -21,14 +18,14 @@ local Window = Rayfield:CreateWindow({
     },
     Discord = {
        Enabled = false,
-       Invite = "",
+       Invite = "https://discord.gg/S2KXT2GsEw",
        RememberJoins = false
     },
     KeySystem = false,
     KeySettings = {
-       Title = "RNG Script",
+       Title = "Untitled",
        Subtitle = "Key System",
-       Note = "Key not required",
+       Note = "No key provided",
        FileName = "Key",
        SaveKey = true,
        GrabKeyFromSite = false,
@@ -36,9 +33,7 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
------------------------------------
--- Blacklist Check
------------------------------------
+-- Blacklist Check (kicks blacklisted players)
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
@@ -47,7 +42,8 @@ local blacklist = {
     1273962566,
     7997266952
 }
-local customMessage = "You are blacklisted from using this script. Appeal via my Discord: moma1133222"
+
+local customMessage = "You are blacklisted from using this script. Appeal by adding my discord: moma1133222"
 
 local function isBlacklisted(id)
     for _, bannedId in ipairs(blacklist) do
@@ -63,47 +59,49 @@ if isBlacklisted(localPlayer.UserId) then
     return
 end
 
-
------------------------------------
--- Configuration Variables
------------------------------------
+-- Configuration for Webhooks & Options
+local webhookURL_Config = ""
 local selectedPotions = {}
 local selectedBiomes = {}
 local usePotionsOnlyAtGlitch = false
 local displayStatsActive = false
 
------------------------------------
 -- Update Log Tab
------------------------------------
 local TabUpdate = Window:CreateTab("Update Log", 4483362458)
-TabUpdate:CreateSection("")
+local SectionUpdate = TabUpdate:CreateSection("")
 
-TabUpdate:CreateParagraph({
+local UpdateParagraph = TabUpdate:CreateParagraph({
     Title = "Update Log",
-    Content = "What's New?\n• Auto Brew\n• Anti Lag, Walk on Water, and Delete Items\n• Glove Switcher\n• Updated Teleport Farm with Tween (DM me if you prefer the old version)\n• Join my Discord for support: moma1133222"
+    Content = "What's New?\n" ..
+              "• Auto Brew\n" ..
+              "• Anti Lag, Walk on Water, and Delete Stuff (in MIC)\n" ..
+              "• Glove Switcher\n" ..
+              "• Teleport Farm replaced with Tween (DM me if you want the old version back)\n" ..
+              "• Join my Discord Server: moma1133222 (Trusted users only)"
 })
 
-TabUpdate:CreateParagraph({
+local SectionUpdate2 = TabUpdate:CreateSection("")
+
+local ToDoParagraph = TabUpdate:CreateParagraph({
     Title = "To Do:",
-    Content = "• Aura Webhook\n• Fun Tab\n• More features...\n• Additional ideas – DM me on Discord: moma1133222"
+    Content = "• Aura Webhook\n" ..
+              "• Fun Tab\n" ..
+              "• More improvements and features…\n" ..
+              "• Additional ideas – DM me on Discord: moma1133222"
 })
 
------------------------------------
--- Main Tab (Auto Farms / Obby)
------------------------------------
+-- Main Tab 
 local TabMain = Window:CreateTab("Auto farms", 4483362458)
-TabMain:CreateSection("Auto farm")
+local SectionMain = TabMain:CreateSection("Auto farm")
 local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
 repeat task.wait() until character:FindFirstChild("HumanoidRootPart")
 local rootPart = character:FindFirstChild("HumanoidRootPart")
 local TweenService = game:GetService("TweenService")
 local humanoid = character:FindFirstChildOfClass("Humanoid")
 
-------------------------------------------------
--- Auto Collect Potion/Gold (Teleport)
-------------------------------------------------
+-- Auto Collect Potion/Gold  Teleport
 local autoCollectInstant = false
-TabMain:CreateToggle({
+local ToggleCollectInstant = TabMain:CreateToggle({
    Name = "Auto Collect Potion/Gold (Teleport)",
    CurrentValue = false,
    Flag = "AutoCollectInstant",
@@ -134,11 +132,9 @@ TabMain:CreateToggle({
    end,
 })
 
-------------------------------------------------
--- Auto Collect Potion/Gold (Tween)
-------------------------------------------------
+-- Auto Collect Potion/Gold  Tween
 local autoCollectTween = false
-TabMain:CreateToggle({
+local ToggleCollectTween = TabMain:CreateToggle({
     Name = "Auto Collect Potion/Gold (Tween)",
     CurrentValue = false,
     Flag = "AutoCollectTween",
@@ -177,11 +173,9 @@ TabMain:CreateToggle({
     end,
 })
 
-------------------------------------------------
--- Remove Seats Button
-------------------------------------------------
-TabMain:CreateButton({
-    Name = "Remove Seats (for auto collect)",
+-- Button to Remove Seats
+local RemoveSeatsButton = TabMain:CreateButton({
+    Name = "Remove Seats - needed for auto collect",
     Callback = function()
         for _, obj in pairs(workspace:GetDescendants()) do
             if obj:IsA("Seat") then
@@ -191,13 +185,11 @@ TabMain:CreateButton({
     end,
 })
 
-------------------------------------------------
--- Auto Obby Luck (Instant Teleport)
-------------------------------------------------
+-- Auto Obby Luck
 local obbyLuck = workspace:FindFirstChild("Obby Luck Platform")
 local canTeleport = false
 local teleportCooldown = false
-TabMain:CreateToggle({
+local ToggleObby = TabMain:CreateToggle({
     Name = "Auto Obby Luck",
     CurrentValue = false,
     Flag = "Toggle1",
@@ -233,12 +225,10 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
-------------------------------------------------
--- AutoFarm Boosts (Instant Teleport)
-------------------------------------------------
+-- AutoFarm Boosts
 local autoFarm = false
-TabMain:CreateToggle({
-    Name = "AutoFarm Boosts (may not work on every executor)",
+local ToggleAutoFarm = TabMain:CreateToggle({
+    Name = "AutoFarm Boosts - Might not work for every executor",
     CurrentValue = false,
     Flag = "AutoFarmToggle",
     Callback = function(Value)
@@ -271,24 +261,23 @@ task.spawn(function()
     end
 end)
 
------------------------------------
--- GUIs Tab
------------------------------------
+-- GUI 
 local TabGUIS = Window:CreateTab("GUIS", 4483362458)
-TabGUIS:CreateButton({
-    Name = "Enable Merchant Buy Screen (if spawned)",
+
+local ButtonMerchantBuy = TabGUIS:CreateButton({
+    Name = "Enable Merchant Buy Screen (if merchant spawned)",
     Callback = function()
         local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
         local merchantUI = playerGui:FindFirstChild("VioletBuyGUI")
         if merchantUI then
             merchantUI.Enabled = true
         else
-            warn("VioletBuyGUI not found; it might not have spawned yet.")
+            warn("VioletBuyGUI not found. It may not have spawned yet.")
         end
     end,
 })
 
-TabGUIS:CreateButton({
+local ButtonPotionCrafting = TabGUIS:CreateButton({
     Name = "Enable Potion Crafting",
     Callback = function()
         local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
@@ -301,7 +290,7 @@ TabGUIS:CreateButton({
     end,
 })
 
-TabGUIS:CreateButton({
+local ButtonGloveCrafting = TabGUIS:CreateButton({
     Name = "Enable Glove Crafting",
     Callback = function()
         local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
@@ -314,13 +303,13 @@ TabGUIS:CreateButton({
     end,
 })
 
------------------------------------
--- Glove Switcher Tab
------------------------------------
+-- Glove Switcher 
 local TabUpdate = Window:CreateTab("Glove Switcher", 4483362458)
-TabUpdate:CreateParagraph({
-    Title = "Glove Switcher Info",
-    Content = "Ensure you own the Cybernetic Gauntlet. When you reach 8 rolls, the script auto-equips the gauntlet for double luck then re-equips your original glove. Choose the correct arm and verify you own the glove."
+TabUpdate:CreateSection("")
+
+local Paragraph = TabUpdate:CreateParagraph({
+    Title = "How it works",
+    Content = "Own the Cybernetic Gauntlet (from Arion’s three-part quest) and when you hit 8 rolls, the script auto-equips it for a double luck bonus. Then it switches back to your original glove. Make sure to select the correct arm and own the glove you want."
 })
 
 local autoRightArmSwitch = false
@@ -344,7 +333,10 @@ TabUpdate:CreateToggle({
     end,
 })
 
-local equipmentFolder = localPlayer:WaitForChild("Equipment", 5)
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local equipmentFolder = player:WaitForChild("Equipment", 5)
+
 local function getCurrentArmItem(armName)
     if equipmentFolder then
         local armObject = equipmentFolder:FindFirstChild(armName)
@@ -364,13 +356,14 @@ local function switchGlove(armName, gloveName)
         :FireServer(unpack(args))
 end
 
-local luckBar = localPlayer:WaitForChild("PlayerGui")
+local luckBar = player:WaitForChild("PlayerGui")
                      :WaitForChild("Main")
                      :WaitForChild("Rolling")
                      :WaitForChild("RollButton")
                      :WaitForChild("LuckBar")
 
 local lastRoll = nil
+
 spawn(function()
     while task.wait(0.1) do
         local text = luckBar.Text
@@ -404,35 +397,22 @@ spawn(function()
     end
 end)
 
------------------------------------
--- Auto Brew Tab (Multi-Craft UI)
------------------------------------
-local TabAutoBrew = Window:CreateTab("Auto brew", 4483362458)
-
+-- Auto Brew 
+local TabGUIS = Window:CreateTab("Auto brew", 4483362458)
 local autoBrew = false
-local potionsFolder = localPlayer:WaitForChild("Crafting"):WaitForChild("Potions")
-local potionNames = {}
-for _, potionFolder in ipairs(potionsFolder:GetChildren()) do
-    table.insert(potionNames, potionFolder.Name)
-end
+local selectedPotions = {}
 
--- Global selections for multi-craft
-_G.SelectedPotions = {}
-_G.SelectedAuras = {}
-local potionsUI = {}
-local multiCraftActive = false
-
--- Auto Brew Toggle (brews a single potion per cycle)
-TabAutoBrew:CreateToggle({
+TabGUIS:CreateToggle({
     Name = "Auto Brew",
     CurrentValue = false,
     Callback = function(state)
         autoBrew = state
+        
         if autoBrew then
             spawn(function()
                 while autoBrew do
-                    if #_G.SelectedPotions > 0 then
-                        for _, potionName in ipairs(_G.SelectedPotions) do
+                    if #selectedPotions > 0 then
+                        for _, potionName in ipairs(selectedPotions) do
                             local args = {"Potions", potionName}
                             game:GetService("ReplicatedStorage")
                                 :WaitForChild("GetRemoteEvents")
@@ -450,9 +430,146 @@ TabAutoBrew:CreateToggle({
     end
 })
 
--- Function to add an aura item for multi-craft
+local potionsFolder = game:GetService("ReplicatedStorage").Meta.Craftables.Potions
+
+for _, potion in ipairs(potionsFolder:GetChildren()) do
+    local potionName = potion.Name
+    
+    TabGUIS:CreateToggle({
+        Name = potionName,
+        CurrentValue = false,
+        Callback = function(isSelected)
+            if isSelected then
+                table.insert(selectedPotions, potionName)
+            else
+                for i, v in ipairs(selectedPotions) do
+                    if v == potionName then
+                        table.remove(selectedPotions, i)
+                        break
+                    end
+                end
+            end
+        end
+    })
+end
+
+-- Free Stuff 
+local TabFree = Window:CreateTab("FREE STUFF", 4483362458)
+local SectionFree = TabFree:CreateSection("FREE STUFF")
+
+local player = game:GetService("Players").LocalPlayer
+
+local function createGamepass(name)
+    local gamepassesFolder = player:FindFirstChild("Gamepasses")
+    if not gamepassesFolder then
+        gamepassesFolder = Instance.new("Folder")
+        gamepassesFolder.Name = "Gamepasses"
+        gamepassesFolder.Parent = player
+    end
+    local gamepass = gamepassesFolder:FindFirstChild(name)
+    if not gamepass then
+        gamepass = Instance.new("BoolValue")
+        gamepass.Name = name
+        gamepass.Parent = gamepassesFolder
+    end
+    gamepass.Value = true
+end
+
+local ButtonQuickRoll = TabFree:CreateButton({
+    Name = "Enable QuickRoll",
+    Callback = function()
+        createGamepass("QuickRoll")
+    end,
+})
+
+local Paragraph = TabFree:CreateParagraph({
+    Title = "Note",
+    Content = "Only QuickRoll works; VIP, 2x Money, and the glove options are just visual."
+})
+
+local ButtonVIP = TabFree:CreateButton({
+    Name = "Enable VIP",
+    Callback = function()
+        createGamepass("VIP")
+    end,
+})
+
+local ButtonMoney = TabFree:CreateButton({
+    Name = "Enable 2x Money",
+    Callback = function()
+        createGamepass("Money")
+    end,
+})
+
+local gearFolder = game:GetService("ReplicatedStorage").Meta.Gear
+local gloveOptions = {}
+for _, gear in ipairs(gearFolder:GetChildren()) do
+    table.insert(gloveOptions, gear.Name)
+end
+
+local function equipGlove(arm, gloveName)
+    local equipmentFolder = player:FindFirstChild("Equipment")
+    if equipmentFolder then
+        local armSlot = equipmentFolder:FindFirstChild(arm)
+        if armSlot then
+            armSlot.Value = gloveName
+        end
+    end
+end
+
+local LeftGloveDropdown = TabFree:CreateDropdown({
+    Name = "Left Glove",
+    Options = gloveOptions,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "LeftGlove",
+    Callback = function(option)
+        if option and #option > 0 then
+            equipGlove("Left Arm", option[1])
+        end
+    end,
+})
+
+local RightGloveDropdown = TabFree:CreateDropdown({
+    Name = "Right Glove",
+    Options = gloveOptions,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "RightGlove",
+    Callback = function(option)
+        if option and #option > 0 then
+            equipGlove("Right Arm", option[1])
+        end
+    end,
+})
+
+-- Multi Crafting 
+local TabTesting = Window:CreateTab("Multi Crafting", 4483362458)
+
+local HowToUseParagraph = TabTesting:CreateParagraph({
+    Title = "How to Use",
+    Content = [[
+1: Select the potion you want to multi craft.
+2: Choose the appropriate auras (recommended: high tiers only).
+3: Go to settings and set the Aura Filter to "keep" for required auras.
+That's it!
+]]
+})
+
+local potionsFolder = localPlayer:WaitForChild("Crafting"):WaitForChild("Potions")
+local potionNames = {}
+for _, potionFolder in ipairs(potionsFolder:GetChildren()) do
+    table.insert(potionNames, potionFolder.Name)
+end
+
+_G.SelectedPotions = {}
+_G.SelectedAuras = {}
+local potionsUI = {}
+local multiCraftToggle
+local multiCraftActive = false
+
 local function addAuraItemCraft(potionName, auraName)
-    local args = {"Potions", potionName, "Aura", auraName, 1}
+    local args = { "Potions", potionName, "Aura", auraName, 1 }
     local addItemRemote = game:GetService("ReplicatedStorage")
         :WaitForChild("GetRemoteEvents")
         :WaitForChild("Crafting")
@@ -462,10 +579,8 @@ local function addAuraItemCraft(potionName, auraName)
     end)
 end
 
--- Create Multi-Craft UI for a given number of slots (10 slots by default)
 local function createPotionsUI(count)
-    -- Create a toggle to start multi-craft on this tab
-    TabAutoBrew:CreateToggle({
+    multiCraftToggle = TabTesting:CreateToggle({
         Name = "Start Multi-Craft",
         CurrentValue = false,
         Callback = function(value)
@@ -491,8 +606,8 @@ local function createPotionsUI(count)
     })
 
     for i = 1, count do
-        local section = TabAutoBrew:CreateSection("Potion #" .. i)
-        local potionDropdown = TabAutoBrew:CreateDropdown({
+        local section = TabTesting:CreateSection("Potion #" .. i)
+        local potionDropdown = TabTesting:CreateDropdown({
             Name = "Select Potion #" .. i,
             Options = potionNames,
             CurrentOption = {},
@@ -535,8 +650,8 @@ local function createPotionsUI(count)
                 end
             end
         })
-        local aurasDropdown = TabAutoBrew:CreateDropdown({
-            Name = "Select Auras for Potion #" .. i,
+        local aurasDropdown = TabTesting:CreateDropdown({
+            Name = "Select Auras (multi) for Potion #" .. i,
             Options = {},
             CurrentOption = {},
             MultipleOptions = true,
@@ -554,12 +669,9 @@ end
 
 createPotionsUI(10)
 
-
------------------------------------
--- Merchant Auto-Buy Tab
------------------------------------
+-- Merchant Auto-Buy 
 local Tab = Window:CreateTab("Merchant Auto-Buy", 4483362458)
-Tab:CreateSection("Merchant")
+local Section = Tab:CreateSection("Merchant")
 
 _G.PurchaseAmount = 0
 _G.AutoBuyEnabled = false
@@ -570,7 +682,11 @@ Tab:CreateInput({
     RemoveTextAfterFocusLost = false,
     Callback = function(text)
         local num = tonumber(text)
-        _G.PurchaseAmount = num or 10
+        if num then
+            _G.PurchaseAmount = num
+        else
+            _G.PurchaseAmount = 10
+        end
     end
 })
 
@@ -601,6 +717,7 @@ spawn(function()
                 :WaitForChild("GetCurrentStock")
                 :InvokeServer()
         end)
+
         if _G.AutoBuyEnabled and success and stockData and next(stockData) then
             for i = 1, _G.PurchaseAmount do
                 buyItemById(2)
@@ -614,6 +731,7 @@ spawn(function()
                 buyItemById(4)
                 task.wait(0.5)
             end
+
             repeat
                 task.wait(2)
                 local s, d = pcall(function()
@@ -628,14 +746,12 @@ spawn(function()
     end
 end)
 
-Tab:CreateParagraph({
+local infoParagraph = Tab:CreateParagraph({
     Title = "Auto-Buy Update",
-    Content = "The old auto-buy was removed for stability. The current version auto-buys all items on sale. For feedback or help, contact me on Discord: moma1133222"
+    Content = "The old auto-buy was too glitchy. This version auto-buys all items for sale so you won't miss out on Stardust Potion I or II if set to 5. If you can help out, add my Discord (moma1133222)."
 })
 
------------------------------------
--- Webhooks & Biome Detection Tab
------------------------------------
+-- Webhooks & Biome Detection Tab 
 local TabWebhook = Window:CreateTab("Webhooks", 4483362458)
 local SectionWebhook = TabWebhook:CreateSection("Webhooks")
 
@@ -645,22 +761,24 @@ end
 
 local function sendBiomeWebhook(newBiome)
     if webhookURL == "" then
-        warn("No webhook URL set. Please provide one in the UI.")
+        warn("No webhook URL set! Please input a valid URL.")
         return
     end
 
     local contentMessage = ""
-    if newBiome == "Glitch" then contentMessage = "@everyone" end
+    if newBiome == "Glitch" then
+        contentMessage = "@everyone"
+    end
 
-    local embedColor = newBiome == "Glitch" and 16711680 or 65280
+    local embedColor = (newBiome == "Glitch") and 16711680 or 65280
 
-    local descriptionText = string.format("Player **%s** is now in the **%s** biome!", localPlayer.Name, newBiome)
+    local descriptionText = string.format("Player **%s** is now in the **%s** biome!", player.Name, newBiome)
     if privateServerLink and privateServerLink ~= "" then
         descriptionText = descriptionText .. "\nServer: " .. privateServerLink
     end
 
     local data = {
-        username = "RNG Webhook",
+        username = "moma hub webhooks",
         avatar_url = "https://cdn.discordapp.com/avatars/1335683455471718412/a_dd829b3d91ebd074581b2719dd020ba4.gif?size=1024",
         content = contentMessage,
         embeds = {
@@ -669,10 +787,10 @@ local function sendBiomeWebhook(newBiome)
                 description = descriptionText,
                 color = embedColor,
                 fields = {
-                    { name = "Player", value = localPlayer.Name, inline = true },
+                    { name = "Player", value = player.Name, inline = true },
                     { name = "Biome", value = newBiome, inline = true }
                 },
-                footer = { text = "RNG Script" },
+                footer = { text = "Powered by moma hub" },
                 timestamp = getTimestampWebhook()
             }
         }
@@ -691,14 +809,14 @@ end
 
 local function sendStatsWebhookWebhook()
     if webhookURL == "" then
-        warn("No webhook URL set. Please provide one in the UI.")
+        warn("No webhook URL set! Please input a valid URL.")
         return
     end
 
     local auraInvCap, donation, highestRNG, money, playTime, rolls, autoCraftVal = "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A"
 
     pcall(function()
-        local visibleData = localPlayer:WaitForChild("VisibleData")
+        local visibleData = player:WaitForChild("VisibleData")
         if visibleData:FindFirstChild("AuraInventoryCapacity") then
             local val = tonumber(visibleData.AuraInventoryCapacity.Value)
             auraInvCap = val and tostring(val) or "N/A"
@@ -717,32 +835,28 @@ local function sendStatsWebhookWebhook()
         end
         if visibleData:FindFirstChild("PlayTime") then
             local seconds = tonumber(visibleData.PlayTime.Value)
-            if seconds and seconds > 0 then
-                playTime = string.format("%.2f hours", seconds / 3600)
-            else
-                playTime = "N/A"
-            end
+            playTime = (seconds and seconds > 0) and string.format("%.2f hours", seconds / 3600) or "N/A"
         end
 
-        local leaderstats = localPlayer:FindFirstChild("leaderstats")
+        local leaderstats = player:FindFirstChild("leaderstats")
         if leaderstats and leaderstats:FindFirstChild("Rolls") then
             local val = tonumber(leaderstats.Roll.Value) or tonumber(leaderstats.Rolls.Value)
             rolls = val and tostring(val) or "N/A"
         end
 
-        local autoCraftObj = localPlayer:FindFirstChild("AutoCraft")
+        local autoCraftObj = player:FindFirstChild("AutoCraft")
         if autoCraftObj and autoCraftObj:IsA("ValueBase") then
             autoCraftVal = tostring(autoCraftObj.Value)
         end
     end)
 
     local data = {
-        username = "RNG Webhook",
+        username = "moma hub webhooks",
         avatar_url = "https://cdn.discordapp.com/avatars/1335683455471718412/a_dd829b3d91ebd074581b2719dd020ba4.gif?size=1024",
         embeds = {
             {
                 title = "Player Stats",
-                description = string.format("Stats for **%s**", localPlayer.Name),
+                description = string.format("Stats for **%s**", player.Name),
                 color = 3447003,
                 fields = {
                     { name = "Aura Inv. Capacity", value = auraInvCap, inline = true },
@@ -753,7 +867,7 @@ local function sendStatsWebhookWebhook()
                     { name = "Rolls", value = rolls, inline = true },
                     { name = "AutoCraft", value = autoCraftVal, inline = true },
                 },
-                footer = { text = "RNG Script" },
+                footer = { text = "Powered by moma hub" },
                 timestamp = getTimestampWebhook()
             }
         }
@@ -770,9 +884,6 @@ local function sendStatsWebhookWebhook()
     end
 end
 
------------------------------------
--- Rayfield Webhook UI Elements
------------------------------------
 local WebhookURLInput = TabWebhook:CreateInput({
     Name = "Webhook URL",
     CurrentValue = "",
@@ -850,21 +961,17 @@ local StardustOnlyToggle = TabWebhook:CreateToggle({
     Callback = function(Value) useStardustOnlyAtStardust = Value end,
 })
 
------------------------------------
--- Biome Detection & Automation
------------------------------------
 spawn(function()
     local oldBiome
     while true do
         wait(1)
         local rawBiomeText = ""
-        pcall(function() rawBiomeText = localPlayer.PlayerGui.Main.GearInventory.Money.Map.Biome.Text end)
+        pcall(function() rawBiomeText = player.PlayerGui.Main.GearInventory.Money.Map.Biome.Text end)
         if rawBiomeText and rawBiomeText ~= "" then
             local newBiome = rawBiomeText:match("Biome:%s*([%w_]+)") or rawBiomeText
             if newBiome ~= oldBiome then
                 if table.find(selectedBiomes, newBiome) then
                     if usePotionsOnlyAtGlitch and newBiome ~= "Glitch" then
-                        -- Do nothing if potions should only be used at Glitch
                     else
                         if #selectedPotions > 0 then
                             for _, potion in ipairs(selectedPotions) do
@@ -915,9 +1022,7 @@ spawn(function()
 end)
 
 local SectionWebhook = TabWebhook:CreateSection("Merchant")
------------------------------------
--- Violet Spawn Notification
------------------------------------
+
 local function sendVioletSpawnWebhook(stock)
     if webhookURL == "" then
         warn("No webhook URL set! Please input a valid URL.")
@@ -930,14 +1035,14 @@ local function sendVioletSpawnWebhook(stock)
     end
 
     local data = {
-        username = "RNG Webhook",
+        username = "moma hub webhooks",
         avatar_url = "https://cdn.discordapp.com/avatars/1335683455471718412/a_dd829b3d91ebd074581b2719dd020ba4.gif?size=1024",
         embeds = {
             {
                 title = "Violet Spawned!",
                 description = descriptionText,
                 color = 3447003,
-                footer = { text = "RNG Script" },
+                footer = { text = "Powered by moma hub" },
                 timestamp = getTimestampWebhook()
             }
         }
@@ -989,9 +1094,7 @@ spawn(function()
     end
 end)
 
------------------------------------
--- Miscellaneous (Mic) Tab
------------------------------------
+-- Mic Tab 
 local TabMic = Window:CreateTab("Mic", 4483362458)
 local SectionMisc = TabMic:CreateSection("Miscellaneous")
 
@@ -1015,6 +1118,7 @@ local ToggleAntiAFK = TabMic:CreateToggle({
         end
     end,
 })
+
 ToggleAntiAFK.Callback(true)
 
 local InfiniteYieldButton = TabMic:CreateButton({
@@ -1026,15 +1130,13 @@ local InfiniteYieldButton = TabMic:CreateButton({
 })
 
 TabMic:CreateButton({
-    Name = "Anti Lag (use when AFK)",
+    Name = "Anti Lag (only use when going AFK, otherwise you might need to rejoin)",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/moma1133222/script/refs/heads/main/less%20lag"))()
-    end,
+    end
 })
 
------------------------------------
 -- Walk on Water Toggle
------------------------------------
 local RunService = game:GetService("RunService")
 local walkOnWaterActive = false
 local waterPlatform
@@ -1078,9 +1180,7 @@ TabMic:CreateToggle({
     end,
 })
 
------------------------------------
--- Delete Trees/Rocks/Mushrooms
------------------------------------
+-- Button to Delete Trees, Rocks, and Mushrooms
 local function deleteObjects()
     local weather = workspace:FindFirstChild("Weather")
     if weather then
@@ -1094,10 +1194,7 @@ local function deleteObjects()
     local daMap = workspace:FindFirstChild("da map")
     if daMap then
         for _, obj in ipairs(daMap:GetDescendants()) do
-            if obj.Name == "Medium Rock1" 
-            or obj.Name == "Small Rock" 
-            or obj.Name == "SmallShroom" 
-            or obj.Name == "Wood" then
+            if obj.Name == "Medium Rock1" or obj.Name == "Small Rock" or obj.Name == "SmallShroom" or obj.Name == "Wood" then
                 obj:Destroy()
             end
         end
@@ -1106,12 +1203,10 @@ end
 
 TabMic:CreateButton({
     Name = "Delete Trees/Rocks/Mushrooms",
-    Callback = deleteObjects,
+    Callback = function() deleteObjects() end,
 })
 
------------------------------------
--- WalkSpeed and JumpPower Sliders
------------------------------------
+-- WalkSpeed and JumpPower Settings
 _G.WalkSpeed = 22
 _G.JumpPower = 8
 
@@ -1127,8 +1222,9 @@ local SpeedSlider = TabMic:CreateSlider({
 })
 
 local defaultJumpPower = 8
-if localPlayer.Character then
-    local hum = localPlayer.Character:FindFirstChildOfClass("Humanoid")
+local player = game.Players.LocalPlayer
+if player.Character then
+    local hum = player.Character:FindFirstChildOfClass("Humanoid")
     if hum then defaultJumpPower = hum.JumpPower end
 end
 
@@ -1144,7 +1240,7 @@ local JumpSlider = TabMic:CreateSlider({
 })
 
 local function setJumpPower(jpower)
-    local char = localPlayer.Character
+    local char = player.Character
     if char then
         local hum = char:FindFirstChildOfClass("Humanoid")
         if hum and type(jpower) == "number" then
@@ -1158,7 +1254,7 @@ local function setJumpPower(jpower)
 end
 
 RunService.Heartbeat:Connect(function()
-    local char = localPlayer.Character
+    local char = player.Character
     if char then
         local hum = char:FindFirstChildOfClass("Humanoid")
         if hum then
