@@ -73,11 +73,9 @@ local SectionUpdate = TabUpdate:CreateSection("")
 local UpdateParagraph = TabUpdate:CreateParagraph({
     Title = "Update Log",
     Content = "What's New?\n" ..
-              "• Auto Brew\n" ..
-              "• Anti Lag, Walk on Water, and Delete Stuff (in MIC)\n" ..
-              "• Glove Switcher\n" ..
-              "• Teleport Farm replaced with Tween (DM me if you want the old version back)\n" ..
-              "• Join my Discord Server: moma1133222 (Trusted users only)"
+              "• auto cast\n" ..
+              "• auto reel\n" ..
+              "• join my discord invite link: d3QjzN6fjT"
 })
 
 local SectionUpdate2 = TabUpdate:CreateSection("")
@@ -260,6 +258,60 @@ task.spawn(function()
         task.wait(0.5)
     end
 end)
+
+local autoCastActive = false
+local ToggleAutoCast = TabMain:CreateToggle({
+    Name = "Auto Cast",
+    CurrentValue = false,
+    Flag = "AutoCast",
+    Callback = function(Value)
+        autoCastActive = Value
+        if autoCastActive then
+            spawn(function()
+                while autoCastActive do
+                    local args = {
+                        [1] = true,
+                        [2] = 1
+                    }
+                    game:GetService("ReplicatedStorage")
+                        :WaitForChild("GetRemoteEvents")
+                        :WaitForChild("Fishing")
+                        :WaitForChild("Cast")
+                        :FireServer(unpack(args))
+                    task.wait(0.5)
+                end
+            end)
+        end
+    end,
+})
+
+
+-- Auto Reel
+local fishingActive = false
+local function followFish()
+    local player = game:GetService("Players").LocalPlayer
+    local fishingFrame = player.PlayerGui:WaitForChild("Fishing"):WaitForChild("FishingFrame"):WaitForChild("Frame")
+    local fish = fishingFrame:WaitForChild("Fish")
+    local bar = fishingFrame:WaitForChild("bar")
+    
+    while fishingActive do
+        local offsetX = -0.1
+        bar.Position = UDim2.new(fish.Position.X.Scale + offsetX, fish.Position.X.Offset, bar.Position.Y.Scale, bar.Position.Y.Offset)
+        task.wait(0) 
+    end
+end
+
+local ToggleFishing = TabMain:CreateToggle({
+    Name = "Auto Reel",
+    CurrentValue = false,
+    Flag = "ToggleFishingBar",
+    Callback = function(Value)
+        fishingActive = Value
+        if fishingActive then
+            spawn(followFish)
+        end
+    end,
+})
 
 -- GUI 
 local TabGUIS = Window:CreateTab("GUIS", 4483362458)
